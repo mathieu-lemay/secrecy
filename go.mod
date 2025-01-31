@@ -1,3 +1,3 @@
-module github.com/negrel/secrecy
+module github.com/mathieu-lemay/secrecy
 
 go 1.20
