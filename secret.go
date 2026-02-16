@@ -64,6 +64,19 @@ func (s Secret[T]) MarshalText() ([]byte, error) {
 	return []byte(SecretLeakedMarker), nil
 }
 
+func (s *Secret[T]) UnmarshalText(text []byte) error {
+	val := reflect.ValueOf(&s.value)
+	elem := val.Elem()
+	
+	switch elem.Kind() {
+	case reflect.String:
+		elem.SetString(string(text))
+		return nil
+	default:
+		return json.Unmarshal(text, &s.value)
+	}
+}
+
 // UnmarshalJSON implements json.Unmarshaler.
 func (s *Secret[T]) UnmarshalJSON(data []byte) error {
 	return json.Unmarshal(data, &s.value)
